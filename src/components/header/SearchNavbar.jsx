@@ -5,6 +5,10 @@ import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { Badge } from '@mui/material';
+import classes from '../../styles/PhoneNavbar.module.css';
+import { BiArrowBack } from 'react-icons/bi';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const SearchNavbars = styled.div`
   display: grid;
@@ -14,6 +18,7 @@ const SearchNavbars = styled.div`
   max-width: 90%;
   margin: 0 auto;
   padding: 1em;
+  position: relative;
 
   border-color: var(--soft-secondary) !important;
   border-bottom: 1px solid #dee2e6 !important;
@@ -31,12 +36,13 @@ const SearchContainer = styled.div`
   flex: 3;
   align-items: center;
   margin: 0 !important;
-  
 
   .form-group-container {
     display: flex;
     align-items: center;
-
+    @media only screen and (max-device-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
+      justify-content: space-between;
+    }
     .form-search input {
       padding: 0.73em;
       border: 1px solid #eee;
@@ -59,6 +65,12 @@ const SearchContainer = styled.div`
       color: white !important;
       border-radius: 0 4px 4px 0;
       min-height: 20px;
+      @media only screen and (max-device-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
+        justify-content: space-between;
+        color: black !important;
+        background-color: transparent;
+        padding: 0px;
+      }
     }
   }
 `;
@@ -69,12 +81,16 @@ const Options = styled.div`
   flex-direction: row;
   flex: 1;
   align-items: center;
-  gap: 1em;
+  gap: 1.4em;
 
   .options-list {
     display: flex;
     align-items: center;
-    gap: 0.2em;
+    /* gap: 0.2em; */
+  }
+  /* Portrait and Landscape */
+  @media only screen and (max-device-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
+    display: none;
   }
 `;
 const Logo = styled.img`
@@ -88,20 +104,38 @@ const Iname = styled.p`
 export const SearchNavbar = () => {
   // CART FROM STORE CART SLICE
   // const cart = useSelector((state) => state.cart.items.length);
+  const [showSearchBar, setShowShearchBar] = useState(false);
 
+  const displayInputFieldHandler = () => {
+    setShowShearchBar(true);
+    document.getElementById('searchInput').focus();
+  };
   return (
     <SearchNavbars>
       <LogoContainer className="logo">
-        <Logo src="../../assets/logo.png" />
+        <Link to={'/'}>
+          <Logo src="../../assets/logo.png" />
+        </Link>
       </LogoContainer>
       <SearchContainer>
-        <form>
+        <form className={classes.Form}>
           <div className="form-group-container">
             <div className="form-search">
-              <input placeholder="search for your products" />
+              <div className={showSearchBar ? classes.Show : classes.Hide}>
+                <BiArrowBack
+                  className={classes.IconBack}
+                  onClick={() => {
+                    setShowShearchBar(false);
+                  }}
+                />
+                <input
+                  placeholder="search for your products"
+                  id="searchInput"
+                />
+              </div>
             </div>
             <div className="form-icon-btn">
-              <SearchIcon />
+              <SearchIcon onClick={displayInputFieldHandler} />
             </div>
           </div>
         </form>

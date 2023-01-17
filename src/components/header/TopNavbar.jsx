@@ -20,6 +20,10 @@ const Container1 = styled.div`
   text-align: center;
   list-style: none;
   flex: 1;
+  @media only screen and (max-device-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
+    justify-content: space-between;
+    padding: 10px;
+  }
 `;
 
 const List1 = styled.div`
@@ -30,7 +34,7 @@ const List1 = styled.div`
   font-weight: 400;
 
   p {
-    font-size: 13px;
+    padding: 0;
     font-size: 13px;
   }
 `;
@@ -44,6 +48,7 @@ const List2 = styled.div`
 
   p {
     font-size: 13px;
+    padding: 0;
   }
 `;
 
@@ -51,6 +56,9 @@ const Container2 = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media only screen and (max-device-width: 1000px) and (-webkit-min-device-pixel-ratio: 1) {
+    display: none;
+  }
 `;
 
 const Phone = styled.div`
@@ -95,12 +103,14 @@ export const TopNavbar = () => {
       <TopNavbars>
         <Container1>
           <List1>
-            <img src="" alt="" />
+            {/* <img src="" alt="" /> */}
             <p>English</p>
-            <ArrowDropDownIcon />
+            <span>
+              <ArrowDropDownIcon />
+            </span>
           </List1>
           <List2>
-            <img src="" alt="" />
+            {/* <img src="" alt="" /> */}
             <p> U.SDollar</p>
             <ArrowDropDownIcon />
           </List2>
@@ -111,7 +121,7 @@ export const TopNavbar = () => {
             <Span>Helps Line +903 343333</Span>
           </Phone>
           <Line />
-          <Link to="/auth" style={{ textDecoration: 'none' }}>
+          <Link to="/auth/login" style={{ textDecoration: 'none' }}>
             <Log>Login</Log>
           </Link>
           <Line />

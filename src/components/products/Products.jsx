@@ -2,8 +2,11 @@ import { Rating } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import Product from './Product';
+import Spinner from '../spinner/spinner';
 
 // styles
 const Head = styled.div`
@@ -185,11 +188,12 @@ const Container = styled.div`
   position: relative;
   overflow: hidden;
   padding: 20px;
+  box-sizing: border-box;
   width: 100%;
 `;
-const Products = () => {
-  // const [loading, setLoading] = useState();
-  const [data, setData] = useState([]);
+const Products = ({ title }) => {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
   // const [visible, setVisible] = useState(5);
 
   const slideLeft = (e) => {
@@ -201,15 +205,18 @@ const Products = () => {
     slider.scrollLeft = slider.scrollLeft + 500;
   };
   useEffect(() => {
+    setLoading(true);
     axios({
       method: 'GET',
       url: 'https://fakestoreapi.com/products?limit=10',
     })
       .then((res) => {
         setData(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
     return () => {};
   }, [setData]);
@@ -218,8 +225,10 @@ const Products = () => {
     <Container>
       <Head>
         <span>
-          <h3>Flash Sale</h3>
-          <p>811</p> : <p>11</p> : <p>11</p> : <p>11</p>
+          <h3>{title}</h3>
+          <span className="Home__flash--buttons">
+            <p>811</p> : <p>11</p> : <p>11</p> : <p>11</p>
+          </span>
         </span>
         <button>View More</button>
       </Head>
@@ -227,43 +236,14 @@ const Products = () => {
         <StyledArrowContainerLeft onClick={slideLeft}>
           <MdKeyboardArrowLeft />
         </StyledArrowContainerLeft>
-        {data.map((values) => {
-          return (
-            <Link
-              key={values.id}
-              to={`/product/${values.id}`}
-              style={{ textDecoration: 'none', color: 'gray' }}
-            >
-              <Card>
-                <Promo>
-                  <h3>OFF</h3>
-                  <p>20%</p>
-                </Promo>
-                <Image>
-                  <img src={values.image} alt="" />
-                </Image>
-
-                <Price>
-                  <p>$90,000</p>
-                  <p>${values.price}</p>
-                </Price>
-                <Rate>
-                  <Rating
-                    name="half-rating"
-                    defaultValue={2.5}
-                    precision={0.5}
-                    size="small"
-                  />
-                  <p>{values.description}</p>
-                  <Point>
-                    <p>Club Point:</p>
-                    <p>{values.rating.count}</p>
-                  </Point>
-                </Rate>
-              </Card>
-            </Link>
-          );
-        })}
+        {data ? (
+          data.map((values) => {
+            console.log(values);
+            return <Product product={values} key={values.id} />;
+          })
+        ) : (
+          <Spinner />
+        )}
         <StyledArrowContainerRight onClick={slideRight}>
           <MdKeyboardArrowRight />
         </StyledArrowContainerRight>
